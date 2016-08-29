@@ -1,0 +1,30 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width')
+    title= title
+    block css
+      link(rel='stylesheet', href='/css/style.css')
+      link(rel='stylesheet', href='/components/angular-material/angular-material.css')
+    block js
+      if ENV_DEVELOPMENT
+        script(src='http://localhost:35729/livereload.js')
+  body
+    block content
+    script(src='/components/angular/angular.js')
+    script(src='/components/angular-aria/angular-aria.js')
+    script(src='/components/angular-animate/angular-animate.js')
+    script(src='/components/angular-material/angular-material.js')
+  
+    script.
+      function initMap() {
+      // Create a map object and specify the DOM element for display.
+          var map = new google.maps.Map(document.getElementById('map-wrapper'), {
+            center: {lat: -34.397, lng: 150.644},
+            scrollwheel: false,
+            zoom: 8
+          });
+          console.log(map);
+      }
+    script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCf9XXnxf4Z0PQt1wHe9nO8V6Z66ZL1uSo&callback=initMap', async='', defer='')
