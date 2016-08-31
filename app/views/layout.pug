@@ -11,12 +11,15 @@ html(lang='en')
       if ENV_DEVELOPMENT
         script(src='http://localhost:35729/livereload.js')
   body
-    block content
+    div(ui-view).height-100
+      block content
+    
     script(src='/components/angular/angular.js')
     script(src='/components/angular-aria/angular-aria.js')
     script(src='/components/angular-animate/angular-animate.js')
     script(src='/components/angular-material/angular-material.js')
-  
+    script(src='/components/angular-ui-router/release/angular-ui-router.js')
+    script(src="/js/index.js")
     script.
       function initMap() {
       // Create a map object and specify the DOM element for display.
