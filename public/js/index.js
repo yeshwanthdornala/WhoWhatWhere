@@ -3,12 +3,13 @@ function homeController($scope){
 }
 
 angular
-	.module('wwwApp', ['ui.router'])
-	.run(function($stateProvider, $urlRouterProvider){
-		console.log('stateProvider', $stateProvider);
+	.module('wwwApp', ['ui.router', 'ngMaterial'])
+	.run(function(){
+	})
+	.config(function($stateProvider, $urlRouterProvider){
 	})
 	.controller('homeController', function($scope){
-		$scope.mammu = "MY";
+		$scope.m = "mathletics"
 	})
 	;
 
