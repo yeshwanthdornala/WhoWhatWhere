@@ -9,17 +9,107 @@ angular
 
 .config(function($stateProvider, $urlRouterProvider){})
 
-.controller('homeController', function($scope, $http, $window){
+.controller('homeController', function($scope, $http, $window, $q, $timeout, $log){
 	var map = null;
+
+	$scope.place = null;
+	$scope.term = null;
+
+	$scope.simulateQuery = false;
+	$scope.isDisabled = false;
+
+	$scope.selectedItemChange = selectedItemChange;
+	$scope.searchTextChange = searchTextChange;
+
+	$scope.selectedPlaceChange = selectedPlaceChange;
+	$scope.searchPlaceChange = searchPlaceChange;
+
+	 $scope.querySearch = function(query) {
+      var results = query ? $scope.AllCategories.filter( createFilterFor(query) ) : $scope.AllCategories,
+          deferred;
+      if ($scope.simulateQuery) {
+        deferred = $q.defer();
+        $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+        return deferred.promise;
+      } else {
+        return results;
+      }
+    }
+
+    $scope.queryPlace = function(query){
+      var results = query ? $scope.AllPlaces.filter( createFilterFor(query) ) : $scope.AllPlaces,
+          deferred;
+      if ($scope.simulateQuery) {
+        deferred = $q.defer();
+        $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+        return deferred.promise;
+      } else {
+        return results;
+      }    	
+    }
+
+    function createFilterFor(query) {
+      var lowercaseQuery = angular.lowercase(query);
+
+      return function filterFn(category) {
+        return (category.value.indexOf(lowercaseQuery) === 0);
+      };
+
+    }
+
+	$scope.loadCategories = function(){
+		var categories = ['Food', 'Cafe', 'NightLife', 'Fun', 'Shopping'];
+
+		return categories.map(function(category){
+			return {
+				value: category.toLowerCase(),
+				display: category
+			}
+		});
+	}
+
+	$scope.loadPlaces = function(){
+		var places = ['Pune', 'Mumbai', 'Hyderabad', 'Chicago', 'Los Angeles', 'Delhi', 'Chennai', 'Kochi', 'Bengaluru'];
+
+		return places.map(function(place){
+			return {
+				value: place.toLowerCase(),
+				display: place
+			}
+		});
+	}
+
+	function searchTextChange(text) {
+      $log.info('Text changed to ' + text);
+    }
+
+    function selectedItemChange(item) {
+      $log.info('Item changed to ' + JSON.stringify(item));
+      $scope.term = item.value;
+    }
+
+    function searchPlaceChange(text){
+    	$log.info('Place changed to + ', text );
+    }
+
+    function selectedPlaceChange(item){
+    	$log.info('Place selected ' + JSON.stringify(item));
+    	$scope.place = item.value;
+    }
+
+	$scope.AllCategories = $scope.loadCategories();
+	$scope.AllPlaces = $scope.loadPlaces();
 
 	$scope.visitSite = function(url){
 		$window.open(url);
 	}
 
-	function getList(){
+	$scope.search = function(){
+		console.log('search...');
+
 		var opt = {
-			"term": "cafe",
-			"location": "sydney"
+			"term": $scope.term,
+			"location": $scope.place
 		};
 
 		$http.post('/getBusiness', opt).then(function(data){
@@ -32,7 +122,7 @@ angular
 		});
 	}
 
-	getList();
+	// getList();
 
 	function setMarkers(map, venues){
 		for (var i = 0; i < venues.length; i++) {
@@ -59,7 +149,7 @@ angular
 
 			google.maps.event.addListener(marker,'mouseout', (function(marker,content,infowindow){ 
 			        return function() {			        	
-			           // infowindow.close();
+			           infowindow.close();
 			        };
 			    })(marker,null,infowindow)); 
 		}
@@ -81,17 +171,34 @@ angular
       			lng: position.coords.longitude
       		};
 
-      		// geocoder.geocode({'location': pos}, function(results, status) {
-      		// 	if (status === 'OK') {
-      		// 		if (results[1]) {
+      		geocoder.geocode({'location': pos}, function(results, status) {
+      			if (status === 'OK') {
+      				if (results[1]) {
+      					console.log('results', results);
+      					for (var ac = 0; ac < results[0].address_components.length; ac++) {
+      						var component = results[0].address_components[ac];
 
-      		// 		} else {
-      		// 			window.alert('No results found');
-      		// 		}
-      		// 	} else {
-      		// 		window.alert('Geocoder failed due to: ' + status);
-      		// 	}
-      		// });
+      						switch(component.types[0]) {
+      							case 'locality':
+	      							$scope.city = component.long_name;
+	      							break;
+      							case 'administrative_area_level_1':
+	      							// storableLocation.state = component.short_name;
+	      							break;
+      							case 'country':
+	      							// storableLocation.country = component.long_name;
+	      							// storableLocation.registered_country_iso_code = component.short_name;
+	      							break;
+      						}
+      					};
+
+      				} else {
+      					window.alert('No results found');
+      				}
+      			} else {
+      				window.alert('Geocoder failed due to: ' + status);
+      			}
+      		});
 
       		// map.setCenter(pos);
       	}, function() {
