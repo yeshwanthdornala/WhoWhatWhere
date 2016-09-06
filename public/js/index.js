@@ -19,7 +19,7 @@ angular
 	function getList(){
 		var opt = {
 			"term": "cafe",
-			"location": "paris"
+			"location": "sydney"
 		};
 
 		$http.post('/getBusiness', opt).then(function(data){
@@ -32,17 +32,36 @@ angular
 		});
 	}
 
-	// getList();
+	getList();
 
 	function setMarkers(map, venues){
 		for (var i = 0; i < venues.length; i++) {
 			var venue = venues[i];
 			var location = venue.location;
 
+			var infowindow = new google.maps.InfoWindow({
+			    content: 'contentString'
+			  });
+
+			var content = "" + "<div class='info_win'><p>" + venue.name + "</p></div>";
+
 			var marker = new google.maps.Marker({
 				position: { lat: location.lat, lng: location.lng },
 				map: map
-			});			
+			});		
+
+			google.maps.event.addListener(marker,'mouseover', (function(marker,content,infowindow){ 
+			        return function() {
+			           infowindow.setContent(content);
+			           infowindow.open(map,marker);
+			        };
+			    })(marker, content ,infowindow)); 
+
+			google.maps.event.addListener(marker,'mouseout', (function(marker,content,infowindow){ 
+			        return function() {			        	
+			           // infowindow.close();
+			        };
+			    })(marker,null,infowindow)); 
 		}
 	}
 
@@ -62,19 +81,19 @@ angular
       			lng: position.coords.longitude
       		};
 
-      		geocoder.geocode({'location': pos}, function(results, status) {
-      			if (status === 'OK') {
-      				if (results[1]) {
-      					
-      				} else {
-      					window.alert('No results found');
-      				}
-      			} else {
-      				window.alert('Geocoder failed due to: ' + status);
-      			}
-      		});
+      		// geocoder.geocode({'location': pos}, function(results, status) {
+      		// 	if (status === 'OK') {
+      		// 		if (results[1]) {
 
-      		map.setCenter(pos);
+      		// 		} else {
+      		// 			window.alert('No results found');
+      		// 		}
+      		// 	} else {
+      		// 		window.alert('Geocoder failed due to: ' + status);
+      		// 	}
+      		// });
+
+      		// map.setCenter(pos);
       	}, function() {
             //- handleLocationError(true, infoWindow, map.getCenter());
         });
