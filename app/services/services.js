@@ -1,5 +1,5 @@
 var Yelp = require('yelp');
-var Dodge = require('Dodge');
+var Dodge = require('dodge');
 
 var yelp = new Yelp({
 	consumer_key: 'ebX5qBcGJJZdtsaKU3f6eg',
