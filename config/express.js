@@ -5,7 +5,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var compress = require('compression');
 var methodOverride = require('method-override');
 
 module.exports = function(app, config) {
@@ -23,7 +22,6 @@ module.exports = function(app, config) {
     extended: true
   }));
   app.use(cookieParser());
-  app.use(compress());
   app.use(express.static(config.root + '/public'));
   app.use(methodOverride());
 

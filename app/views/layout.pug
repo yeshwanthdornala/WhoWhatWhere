@@ -11,16 +11,16 @@ html(lang='en')
     block js
       if ENV_DEVELOPMENT
         script(src='http://localhost:35729/livereload.js')
-      script(src='/components/angular/angular.js')
-      script(src='/components/angular-aria/angular-aria.js')
-      script(src='/components/angular-animate/angular-animate.js')
-      script(src='/components/angular-material/angular-material.js')
-      script(src='/components/angular-ui-router/release/angular-ui-router.js')
-      script(src='/components/angular-loading-bar/build/loading-bar.min.js')
-      script(src="/js/index.js")
-      script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCf9XXnxf4Z0PQt1wHe9nO8V6Z66ZL1uSo')
-      script(src='/components/google-infobox/google-infobox.js')
   body
     div(ng-app="wwwApp").height-100
       block content
     
+    script(src='/components/angular/angular.js')
+    script(src='/components/angular-aria/angular-aria.js')
+    script(src='/components/angular-animate/angular-animate.js')
+    script(src='/components/angular-material/angular-material.js')
+    script(src='/components/angular-ui-router/release/angular-ui-router.js')
+    script(src='/components/angular-loading-bar/build/loading-bar.min.js')
+    script(src="/js/index.js")
+    script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCf9XXnxf4Z0PQt1wHe9nO8V6Z66ZL1uSo')
+    script(src='/components/google-infobox/google-infobox.js')

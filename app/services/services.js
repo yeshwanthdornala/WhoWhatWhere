@@ -19,14 +19,16 @@ function parseFourSquare(data, venues){
 
 		fsArray.id = fsd.id;
 		fsArray.name = fsd.name;
-		fsArray.phone = fsd.contact.formattedPhone;
+		fsArray.phone = fsd.contact.formattedPhone || 'Not Available';
 		fsArray.url= fsd.url;
-		fsArray.imgUrl = null;
+		fsArray.rating = fsd.rating || 'Not Available';
+
+		fsArray.imgUrl = "/img/noimg.png";
 
 		fsArray.location  = {};
 		fsArray.location.lat = fsd.location.lat;
 		fsArray.location.lng = fsd.location.lng;
-		fsArray.location.address = fsd.location.address;
+		fsArray.location.address = fsd.location.address || 'Not Available';
 		fsArray.location.postal = fsd.location.postalCode;
 		fsArray.location.city = fsd.location.city;
 		fsArray.location.state = fsd.location.state;
@@ -108,7 +110,7 @@ module.exports = {
 		var opt = {
 			near: req.body.location,
 			query: req.body.term,
-			limit: 25
+			limit: 15
 		}
 
 		Foursquare.venues.search(opt, function(err, foursquareData){
@@ -118,7 +120,6 @@ module.exports = {
 
 			if (foursquareData) {
 				venues = parseFourSquare(foursquareData, venues);
-				// console.log('v', venues);
 			}
 
 			var yopt = {
@@ -129,21 +130,24 @@ module.exports = {
 
 			yelp.search(yopt)
 			.then(function success(yelpData){
-
-				console.log('yelp success', yelpData);
-
 				if (yelpData) {
 					venues = parseYelp(yelpData, venues);
 				}
 
+				return res.json({
+					venues: venues
+				});
+				
 			}, function error(err){
+
+				if(err.data.error.id === 'UNAVAILABLE_FOR_LOCATION'){					
+					return res.json({
+						venues: venues
+					});
+				}
+
 				console.log('yelp failure', err);
 				return res.json(err);
-			});
-
-				
-			return res.json({
-				venues: venues
 			});
 		});
 	}

@@ -101,6 +101,7 @@ angular
 	$scope.AllPlaces = $scope.loadPlaces();
 
 	$scope.visitSite = function(url){
+    alert(1);
 		$window.open(url);
 	}
 
@@ -136,7 +137,13 @@ angular
 			    content: 'contentString'
 			  });
 
-			var content = "" + "<div class='info_win'><p>" + venue.name + "</p></div>";
+			var content = "" + "<div class='info_win'>" + 
+                            "<img alt='" + venue.name + "' src='" + venue.imgUrl + "' />" +
+                            "<div class='name'>" + venue.name + "</div>" + 
+                            "<div class='lines'><span class='title'>Phone: </span>" + venue.phone + "</div>" +                            
+                            "<div class='lines'><span class='title'>Address: </span>" + venue.location.address + "</div>" +
+                            "<div class='lines'><span class='title'>Rating: </span>" + venue.rating + "</div>" +
+                          "</div>";
 
        var myOptions = {
                  content: content               
@@ -144,17 +151,16 @@ angular
 
 			var marker = new google.maps.Marker({
 				position: { lat: location.lat, lng: location.lng },
-				map: map
+				map: map,
+        id: venue.id
 			});		
 
       bounds.extend(marker.getPosition());
 
 			google.maps.event.addListener(marker,'mouseover', (function(marker,content,infowindow){ 
 			        return function() {
-        var ib = new InfoBox(myOptions);
-        ib.open(map, marker);                
-			           // infowindow.setContent(content);
-			           // infowindow.open(map,marker);
+			           infowindow.setContent(content);
+			           infowindow.open(map,marker);
 			        };
 			    })(marker, content ,infowindow)); 
 
