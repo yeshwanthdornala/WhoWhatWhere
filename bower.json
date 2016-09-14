@@ -9,6 +9,7 @@
   "dependencies": {
     "angular-material": "^1.1.0",
     "angular-ui-router": "^0.3.1",
-    "angular-loading-bar": "^0.9.0"
+    "angular-loading-bar": "^0.9.0",
+    "google-infobox": "*"
   }
 }

@@ -125,34 +125,47 @@ angular
 	// getList();
 
 	function setMarkers(map, venues){
+    var bounds = new google.maps.LatLngBounds();
+
 		for (var i = 0; i < venues.length; i++) {
 			var venue = venues[i];
 			var location = venue.location;
+
 
 			var infowindow = new google.maps.InfoWindow({
 			    content: 'contentString'
 			  });
 
 			var content = "" + "<div class='info_win'><p>" + venue.name + "</p></div>";
+      var content = "" + "          md-list-item.md-3-line img.md-avatar(ng-src='{{venue.imgUrl || "/img/noimg.png"}}?{{$index}}', alt='{{venue.name}}')            .md-list-item-text(layout='column')              h3 {{ venue.name }}              h4 {{ venue.phone }}              p {{ venue.address }}              a(ng-href='visitSite("{{venue.url}}")') Visit site";
+       var myOptions = {
+                 content: content               
+        };
 
 			var marker = new google.maps.Marker({
 				position: { lat: location.lat, lng: location.lng },
 				map: map
 			});		
 
+      bounds.extend(marker.getPosition());
+
 			google.maps.event.addListener(marker,'mouseover', (function(marker,content,infowindow){ 
 			        return function() {
-			           infowindow.setContent(content);
-			           infowindow.open(map,marker);
+        var ib = new InfoBox(myOptions);
+        ib.open(map, marker);                
+			           // infowindow.setContent(content);
+			           // infowindow.open(map,marker);
 			        };
 			    })(marker, content ,infowindow)); 
 
 			google.maps.event.addListener(marker,'mouseout', (function(marker,content,infowindow){ 
 			        return function() {			        	
-			           infowindow.close();
+			          // infowindow.close();
 			        };
 			    })(marker,null,infowindow)); 
 		}
+
+    map.fitBounds(bounds);
 	}
 
 	function initMap() {
@@ -180,7 +193,7 @@ angular
 
       						switch(component.types[0]) {
       							case 'locality':
-	      							$scope.city = component.long_name;
+	      							$scope.place = component.long_name;
 	      							break;
       							case 'administrative_area_level_1':
 	      							// storableLocation.state = component.short_name;
