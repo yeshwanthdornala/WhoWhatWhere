@@ -36,9 +36,13 @@ a {
     font-weight: bold;
     color: #3949AB; }
   .info_win .title {
+    color: #000000;
     font-weight: bold; }
   .info_win .lines {
     padding: 5px 0; }
+  .info_win .rating {
+    color: green;
+    font-weight: bold; }
 
 .text-center {
   text-align: center; }

@@ -24,6 +24,8 @@ angular
 	$scope.selectedPlaceChange = selectedPlaceChange;
 	$scope.searchPlaceChange = searchPlaceChange;
 
+  $scope.markers = [];
+
 	 $scope.querySearch = function(query) {
       var results = query ? $scope.AllCategories.filter( createFilterFor(query) ) : $scope.AllCategories,
           deferred;
@@ -124,7 +126,7 @@ angular
 	}
 
 	// getList();
-
+  var infowindow = null;
 	function setMarkers(map, venues){
     var bounds = new google.maps.LatLngBounds();
 
@@ -133,7 +135,7 @@ angular
 			var location = venue.location;
 
 
-			var infowindow = new google.maps.InfoWindow({
+			infowindow = new google.maps.InfoWindow({
 			    content: 'contentString'
 			  });
 
@@ -142,7 +144,7 @@ angular
                             "<div class='name'>" + venue.name + "</div>" + 
                             "<div class='lines'><span class='title'>Phone: </span>" + venue.phone + "</div>" +                            
                             "<div class='lines'><span class='title'>Address: </span>" + venue.location.address + "</div>" +
-                            "<div class='lines'><span class='title'>Rating: </span>" + venue.rating + "</div>" +
+                            "<div class='lines rating'><span class='title'>Rating: </span>" + venue.rating + "</div>" +
                           "</div>";
 
        var myOptions = {
@@ -153,26 +155,41 @@ angular
 				position: { lat: location.lat, lng: location.lng },
 				map: map,
         id: venue.id
-			});		
+			});
+
+      $scope.markers.push(marker);
 
       bounds.extend(marker.getPosition());
 
 			google.maps.event.addListener(marker,'mouseover', (function(marker,content,infowindow){ 
 			        return function() {
-			           infowindow.setContent(content);
-			           infowindow.open(map,marker);
+			          infowindow.setContent(content);
+			          infowindow.open(map,marker);
 			        };
 			    })(marker, content ,infowindow)); 
 
 			google.maps.event.addListener(marker,'mouseout', (function(marker,content,infowindow){ 
-			        return function() {			        	
-			          // infowindow.close();
+			        return function() {
+			          infowindow.close();
 			        };
 			    })(marker,null,infowindow)); 
 		}
 
     map.fitBounds(bounds);
 	}
+
+  $scope.hoverMarker = function(id){
+    for (var i = 0; i < $scope.markers.length; i++) {
+      var marker = $scope.markers[i];
+      console.log(marker, id);
+      if(marker.id == id){
+        console.log('marker found', marker);
+
+        infowindow.close();
+        google.maps.event.trigger(marker, 'mouseover');
+      }
+    }
+  }
 
 	function initMap() {
       // Create a map object and specify the DOM element for display.
