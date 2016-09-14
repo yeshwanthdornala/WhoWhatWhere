@@ -3,7 +3,7 @@ extends layout
 block content
 	#container(ng-controller="homeController").height-100
 		div(layout='row').height-100
-			div(flex='70').height-100
+			div(flex='').height-100
 				#map-wrapper.height-100
 				.search-container
 					div(layout='row')
@@ -21,8 +21,9 @@ block content
 								md-not-found
 								| No states matching "{{searchPlace}}" were found.
 								a(ng-click='newState(searchPlace)') Create a new one!
-						div(flex='')
-							md-button(ng-click='search()').md-raised Search
+					div(layout='row')
+						div(flex='', class='text-center')
+							md-button(ng-click='search()', class='md-primary').md-raised Search
 			div(flex='30', ng-show='venues')
 				md-list(flex='').list
 					md-subheader.md-no-sticky 3 line item (with hover)

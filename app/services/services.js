@@ -118,7 +118,7 @@ module.exports = {
 
 			if (foursquareData) {
 				venues = parseFourSquare(foursquareData, venues);
-				console.log('v', venues);
+				// console.log('v', venues);
 			}
 
 			var yopt = {
@@ -130,18 +130,21 @@ module.exports = {
 			yelp.search(yopt)
 			.then(function success(yelpData){
 
+				console.log('yelp success', yelpData);
+
 				if (yelpData) {
 					venues = parseYelp(yelpData, venues);
 				}
-				
-				return res.json({
-					venues: venues
-				});
 
 			}, function error(err){
+				console.log('yelp failure', err);
 				return res.json(err);
 			});
 
+				
+			return res.json({
+				venues: venues
+			});
 		});
 	}
 }

@@ -137,7 +137,7 @@ angular
 			  });
 
 			var content = "" + "<div class='info_win'><p>" + venue.name + "</p></div>";
-      var content = "" + "          md-list-item.md-3-line img.md-avatar(ng-src='{{venue.imgUrl || "/img/noimg.png"}}?{{$index}}', alt='{{venue.name}}')            .md-list-item-text(layout='column')              h3 {{ venue.name }}              h4 {{ venue.phone }}              p {{ venue.address }}              a(ng-href='visitSite("{{venue.url}}")') Visit site";
+
        var myOptions = {
                  content: content               
         };
