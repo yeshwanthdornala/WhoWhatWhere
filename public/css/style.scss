@@ -28,6 +28,10 @@ a {
 .list{
 	height: 100%;
 	overflow: auto;
+
+	.md-3-line:nth-child(even){
+		background-color: #eee;
+	}
 }
 
 .info_win{
