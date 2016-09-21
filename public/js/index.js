@@ -1,7 +1,3 @@
-function homeController($scope){
-
-}
-
 angular
 .module('wwwApp', ['ui.router', 'ngMaterial', 'angular-loading-bar'])
 
@@ -81,7 +77,7 @@ angular
 		});
 	}
 
-	function searchTextChange(text) {
+  	function searchTextChange(text) {
       $log.info('Text changed to ' + text);
     }
 
@@ -126,7 +122,6 @@ angular
 		});
 	}
 
-	// getList();
   var infowindow = null;
 	function setMarkers(map, venues){
     var bounds = new google.maps.LatLngBounds();
@@ -174,18 +169,23 @@ angular
 
 			google.maps.event.addListener(marker,'mouseover', (function(marker,content){ 
 			        return function() {
-                console.log('mouseover', infowindow);
-
 			          infowindow.setContent(content);
 			          infowindow.open(map,marker);
 			        };
 			    })(marker, content)); 
 
-			google.maps.event.addListener(marker,'mouseout', (function(marker,content){ 
-			        return function() {
-			          infowindow.close();
-			        };
-			    })(marker, null)); 
+      google.maps.event.addListener(marker,'click', (function(marker,content){ 
+              return function() {
+                infowindow.setContent(content);
+                infowindow.open(map,marker);
+              };
+          })(marker, content));       
+
+			// google.maps.event.addListener(marker,'mouseout', (function(marker,content){ 
+			//         return function() {
+			//           infowindow.close();
+			//         };
+			//     })(marker, null)); 
 		}
 
     map.fitBounds(bounds);
@@ -206,7 +206,13 @@ angular
       map = new google.maps.Map(document.getElementById('map-wrapper'), {
       	center: {lat: -34.397, lng: 150.644},
       	scrollwheel: true,
-      	zoom: 8
+      	zoom: 8,
+        zoomControl: true,
+        mapTypeControl: false,
+        scaleControl: false,
+        streetViewControl: false,
+        rotateControl: false,
+        fullscreenControl: false
       });
 
       if (navigator.geolocation) {
@@ -219,24 +225,18 @@ angular
       		geocoder.geocode({'location': pos}, function(results, status) {
       			if (status === 'OK') {
       				if (results[1]) {
-
       					for (var ac = 0; ac < results[0].address_components.length; ac++) {
       						var component = results[0].address_components[ac];
-
       						switch(component.types[0]) {
       							case 'locality':
 	      							$scope.place = component.long_name;
 	      							break;
       							case 'administrative_area_level_1':
-	      							// storableLocation.state = component.short_name;
 	      							break;
       							case 'country':
-	      							// storableLocation.country = component.long_name;
-	      							// storableLocation.registered_country_iso_code = component.short_name;
 	      							break;
       						}
       					};
-
       				} else {
       					window.alert('No results found');
       				}
@@ -253,5 +253,3 @@ angular
   }, 500);
 })
 ;
-
-homeController.$inject = ['$scope'];
