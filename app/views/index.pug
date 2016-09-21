@@ -26,7 +26,7 @@ block content
 							md-button(ng-click='search()', class='md-primary').md-raised Search
 			div(flex='30', ng-show='venues')
 				md-list(flex='').list
-					md-subheader.md-no-sticky 3 line item (with hover)
+					md-subheader.md-no-sticky List of {{ searchText }}(s)
 					md-list-item.md-3-line(ng-repeat='venue in venues', ng-click='hoverMarker(venue.id)')
 						img.md-avatar(ng-src='{{venue.imgUrl || "/img/noimg.png"}}?{{$index}}', alt='{{venue.name}}')
 						.md-list-item-text(layout='column')
