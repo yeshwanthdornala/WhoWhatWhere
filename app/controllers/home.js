@@ -1,6 +1,5 @@
 var express = require('express'),
-  router = express.Router(),
-  Article = require('../models/article');
+  router = express.Router();
 
 var services = require('../services/services');
 
@@ -9,10 +8,8 @@ module.exports = function (app) {
 };
 
 router.get('/', function (req, res, next) {
-  var articles = [new Article(), new Article()];
     res.render('index', {
-      title: 'Who what Where',
-      articles: articles
+      title: 'Who what Where'
     });
 });
 

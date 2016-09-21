@@ -140,14 +140,22 @@ module.exports = {
 				
 			}, function error(err){
 
-				if(err.data.error.id === 'UNAVAILABLE_FOR_LOCATION'){					
-					return res.json({
-						venues: venues
-					});
-				}
+				// console.log('yelp failure', err);
+				// if(err.data.error.id === 'UNAVAILABLE_FOR_LOCATION' || err.statusCode == 400){
+				// 	console.log('inside');
+				// 	return res.json({
+				// 		venues: venues
+				// 	});
+				// }else{
+				// 	console.log('inside else');
+				// 	return res.json({
+				// 		venues: venues
+				// 	});					
+				// }
 
-				console.log('yelp failure', err);
-				return res.json(err);
+				return res.json({
+					venues: venues
+				});
 			});
 		});
 	}

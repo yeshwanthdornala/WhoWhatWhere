@@ -163,6 +163,7 @@ angular
 
 			google.maps.event.addListener(marker,'mouseover', (function(marker,content,infowindow){ 
 			        return function() {
+                console.log('mouseover', infowindow)
 			          infowindow.setContent(content);
 			          infowindow.open(map,marker);
 			        };
@@ -185,6 +186,7 @@ angular
       if(marker.id == id){
         console.log('marker found', marker);
 
+        console.log('hover marker', infowindow);
         infowindow.close();
         google.maps.event.trigger(marker, 'mouseover');
       }
