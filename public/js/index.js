@@ -135,11 +135,6 @@ angular
 			var venue = venues[i];
 			var location = venue.location;
 
-
-  			infowindow = new google.maps.InfoWindow({
-			    content: 'contentString'
-			  });
-
 			var content = "" + "<div class='info_win'>" + 
                             "<img alt='" + venue.name + "' src='" + venue.imgUrl + "' />" +
                             "<div class='name' ng-click='visitSite(" + '"' + venue.url + '"' + ")'>" + venue.name + "</div>" + 
@@ -149,7 +144,10 @@ angular
                           "</div>";
 
       content = $compile(content)($scope)[0];
-      // content = content[0];
+
+      infowindow = new google.maps.InfoWindow({
+          content: content
+        });
 
  			var marker = new google.maps.Marker({
 				position: { lat: location.lat, lng: location.lng },
@@ -161,19 +159,20 @@ angular
 
       bounds.extend(marker.getPosition());
 
-			google.maps.event.addListener(marker,'mouseover', (function(marker,content,infowindow){ 
+			google.maps.event.addListener(marker,'mouseover', (function(marker,content){ 
 			        return function() {
-                console.log('mouseover', infowindow)
+                console.log('mouseover', infowindow);
+
 			          infowindow.setContent(content);
 			          infowindow.open(map,marker);
 			        };
-			    })(marker, content ,infowindow)); 
+			    })(marker, content)); 
 
-			google.maps.event.addListener(marker,'mouseout', (function(marker,content,infowindow){ 
+			google.maps.event.addListener(marker,'mouseout', (function(marker,content){ 
 			        return function() {
 			          infowindow.close();
 			        };
-			    })(marker,null,infowindow)); 
+			    })(marker, null)); 
 		}
 
     map.fitBounds(bounds);
@@ -182,7 +181,6 @@ angular
   $scope.hoverMarker = function(id){
     for (var i = 0; i < $scope.markers.length; i++) {
       var marker = $scope.markers[i];
-      console.log(marker, id);
       if(marker.id == id){
         google.maps.event.trigger(marker, 'mouseover');
       }
