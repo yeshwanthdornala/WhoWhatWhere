@@ -149,10 +149,23 @@ angular
           content: content
         });
 
+      var icon = '';
+      if(venue.imgUrl){
+        if(venue.imgUrl.includes('http')){
+          icon = {
+               url: venue.imgUrl,
+               scaledSize: new google.maps.Size(50, 50),
+               origin: new google.maps.Point(0,0),
+               anchor: new google.maps.Point(0,0)
+           };
+        }
+      }
+
  			var marker = new google.maps.Marker({
 				position: { lat: location.lat, lng: location.lng },
 				map: map,
-        id: venue.id
+        id: venue.id,
+        icon: icon
 			});
 
       $scope.markers.push(marker);
@@ -206,7 +219,7 @@ angular
       		geocoder.geocode({'location': pos}, function(results, status) {
       			if (status === 'OK') {
       				if (results[1]) {
-      					console.log('results', results);
+
       					for (var ac = 0; ac < results[0].address_components.length; ac++) {
       						var component = results[0].address_components[ac];
 
@@ -231,21 +244,13 @@ angular
       				window.alert('Geocoder failed due to: ' + status);
       			}
       		});
-
-      		// map.setCenter(pos);
-      	}, function() {
-            //- handleLocationError(true, infoWindow, map.getCenter());
-        });
-      } else {
-          // Browser doesn't support Geolocation
-          //- handleLocationError(false, infoWindow, map.getCenter());
+      	}, function() {});
       }
   }
 
   setTimeout(function() {      	
   	initMap();
   }, 500);
-
 })
 ;
 
