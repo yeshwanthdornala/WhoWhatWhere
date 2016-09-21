@@ -9,7 +9,7 @@ angular
 
 .config(function($stateProvider, $urlRouterProvider){})
 
-.controller('homeController', function($scope, $http, $window, $q, $timeout, $log){
+.controller('homeController', function($scope, $http, $window, $q, $timeout, $log, $compile){
 	var map = null;
 
 	$scope.place = null;
@@ -103,8 +103,9 @@ angular
 	$scope.AllPlaces = $scope.loadPlaces();
 
 	$scope.visitSite = function(url){
-    alert(1);
-		$window.open(url);
+    if(url !== 'undefined'){
+  		$window.open(url);
+    }
 	}
 
 	$scope.search = function(){
@@ -135,23 +136,22 @@ angular
 			var location = venue.location;
 
 
-			infowindow = new google.maps.InfoWindow({
+  			infowindow = new google.maps.InfoWindow({
 			    content: 'contentString'
 			  });
 
 			var content = "" + "<div class='info_win'>" + 
                             "<img alt='" + venue.name + "' src='" + venue.imgUrl + "' />" +
-                            "<div class='name'>" + venue.name + "</div>" + 
+                            "<div class='name' ng-click='visitSite(" + '"' + venue.url + '"' + ")'>" + venue.name + "</div>" + 
                             "<div class='lines'><span class='title'>Phone: </span>" + venue.phone + "</div>" +                            
                             "<div class='lines'><span class='title'>Address: </span>" + venue.location.address + "</div>" +
                             "<div class='lines rating'><span class='title'>Rating: </span>" + venue.rating + "</div>" +
                           "</div>";
 
-       var myOptions = {
-                 content: content               
-        };
+      content = $compile(content)($scope)[0];
+      // content = content[0];
 
-			var marker = new google.maps.Marker({
+ 			var marker = new google.maps.Marker({
 				position: { lat: location.lat, lng: location.lng },
 				map: map,
         id: venue.id
@@ -184,10 +184,6 @@ angular
       var marker = $scope.markers[i];
       console.log(marker, id);
       if(marker.id == id){
-        console.log('marker found', marker);
-
-        console.log('hover marker', infowindow);
-        infowindow.close();
         google.maps.event.trigger(marker, 'mouseover');
       }
     }

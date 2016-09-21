@@ -34,7 +34,9 @@ a {
   .info_win .name {
     font-size: 20px;
     font-weight: bold;
-    color: #3949AB; }
+    color: #3949AB;
+    outline: none;
+    cursor: pointer; }
   .info_win .title {
     color: #000000;
     font-weight: bold; }
